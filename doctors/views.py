@@ -1,12 +1,6 @@
-from .serializers import DoctorSerializer
-from .models import Doctor
-from rest_framework.decorators import api_view
-from rest_framework.response import Response
-from rest_framework import status
-from rest_framework.views import APIView 
-from rest_framework.generics import ListAPIView, CreateAPIView
 
-#Vistas basadas en funciones 
+
+#----------------Vistas basadas en funciones ----------------
 # @api_view(['GET', 'POST'])
 # def list_doctors(request):
 #     if request.method == 'GET':
@@ -42,37 +36,109 @@ from rest_framework.generics import ListAPIView, CreateAPIView
 #         patient.delete()
 #         return Response(status=status.HTTP_204_NO_CONTENT)
 
-#Pasamos como parametro vistas genericas
-class ListDoctorsView(ListAPIView, CreateAPIView ):
-    allowed_methods =['GET', 'POST']
-    serializer_class= DoctorSerializer
-    queryset=Doctor.objects.all()
+#--------------------------Pasamos como parametro vistas genericas
+# class ListDoctorsView(ListAPIView, CreateAPIView ):
+#     allowed_methods =['GET', 'POST']
+#     serializer_class= DoctorSerializer
+#     queryset=Doctor.objects.all()
 
-# Usamos las vistas y definimos y tenemos mas control de los metodos 
-class DetailDoctors(APIView):
-    allowed_methods =['GET', 'PUT', 'DELETE']
-    def get (self,request,pk):
-        try:
-            patient = Doctor.objects.get(id=pk)
-        except Doctor.DoesNotExist:
-            return Response(status=status.HTTP_404_NOT_FOUND)
+# ----------Usamos las vistas y definimos y tenemos mas control de los metodos 
+# class DetailDoctors(APIView):
+#     allowed_methods =['GET', 'PUT', 'DELETE']
+#     def get (self,request,pk):
+#         try:
+#             patient = Doctor.objects.get(id=pk)
+#         except Doctor.DoesNotExist:
+#             return Response(status=status.HTTP_404_NOT_FOUND)
 
-        if request.method == 'GET':
-            serializer = DoctorSerializer(patient)
-        return Response(serializer.data)
-    def put(self,request,pk):
-        try:
-            patient = Doctor.objects.get(id=pk)
-        except Doctor.DoesNotExist:
-            return Response(status=status.HTTP_404_NOT_FOUND)
-        serializer = DoctorSerializer(patient, data=request.data)
-        serializer.is_valid(raise_exception=True) # exception para validar que se reciban los datos segun las reglas del serializador
-        serializer.save()
-        return Response(serializer.data, status=status.HTTP_201_CREATED)
-    def delete(self,request,pk):
-        try:
-            patient = Doctor.objects.get(id=pk)
-        except Doctor.DoesNotExist:
-            return Response(status=status.HTTP_404_NOT_FOUND)
-        patient.delete()
-        return Response(status=status.HTTP_204_NO_CONTENT)
+#         if request.method == 'GET':
+#             serializer = DoctorSerializer(patient)
+#         return Response(serializer.data)
+#     def put(self,request,pk):
+#         try:
+#             patient = Doctor.objects.get(id=pk)
+#         except Doctor.DoesNotExist:
+#             return Response(status=status.HTTP_404_NOT_FOUND)
+#         serializer = DoctorSerializer(patient, data=request.data)
+#         serializer.is_valid(raise_exception=True) # exception para validar que se reciban los datos segun las reglas del serializador
+#         serializer.save()
+#         return Response(serializer.data, status=status.HTTP_201_CREATED)
+#     def delete(self,request,pk):
+#         try:
+#             patient = Doctor.objects.get(id=pk)
+#         except Doctor.DoesNotExist:
+#             return Response(status=status.HTTP_404_NOT_FOUND)
+#         patient.delete()
+#         return Response(status=status.HTTP_204_NO_CONTENT)
+
+# class DetailDoctors(RetrieveUpdateDestroyAPIView):
+#     allowed_methods =['GET', 'PUT', 'DELETE']
+#     serializer_class= DoctorSerializer
+#     queryset=Doctor.objects.all()
+
+from rest_framework.generics import (
+    ListAPIView,
+    CreateAPIView,
+    RetrieveUpdateDestroyAPIView,
+)
+
+from .models import (
+    Doctor,
+    Department,
+    DoctorAvailability,
+    MedicalNote,
+)
+from .serializers import (
+    DoctorSerializer,
+    DepartmentSerializer,
+    DoctorAvailabilitySerializer,
+    MedicalNoteSerializer,
+)
+
+
+class ListDoctorView(ListAPIView, CreateAPIView):
+    allowed_methods = ['GET', 'POST']
+    serializer_class = DoctorSerializer
+    queryset = Doctor.objects.all()
+
+
+class DetailDoctorView(RetrieveUpdateDestroyAPIView):
+    allowed_methods = ['GET', 'PUT', 'DELETE']
+    serializer_class = DoctorSerializer
+    queryset = Doctor.objects.all()
+
+
+class ListDepartmentView(ListAPIView, CreateAPIView):
+    allowed_methods = ['GET', 'POST']
+    serializer_class = DepartmentSerializer
+    queryset = Department.objects.all()
+
+
+class DetailDepartmentView(RetrieveUpdateDestroyAPIView):
+    allowed_methods = ['GET', 'PUT', 'DELETE']
+    serializer_class = DepartmentSerializer
+    queryset = Department.objects.all()
+
+
+class ListDoctorAvailabilityView(ListAPIView, CreateAPIView):
+    allowed_methods = ['GET', 'POST']
+    serializer_class = DoctorAvailabilitySerializer
+    queryset = DoctorAvailability.objects.all()
+
+
+class DetailDoctorAvailabilityView(RetrieveUpdateDestroyAPIView):
+    allowed_methods = ['GET', 'PUT', 'DELETE']
+    serializer_class = DoctorAvailabilitySerializer
+    queryset = DoctorAvailability.objects.all()
+
+
+class ListMedicalNoteView(ListAPIView, CreateAPIView):
+    allowed_methods = ['GET', 'POST']
+    serializer_class = MedicalNoteSerializer
+    queryset = MedicalNote.objects.all()
+
+
+class DetailMedicalNoteView(RetrieveUpdateDestroyAPIView):
+    allowed_methods = ['GET', 'PUT', 'DELETE']
+    serializer_class = MedicalNoteSerializer
+    queryset = MedicalNote.objects.all()
