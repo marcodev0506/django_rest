@@ -1,5 +1,3 @@
-
-
 #----------------Vistas basadas en funciones ----------------
 # @api_view(['GET', 'POST'])
 # def list_doctors(request):
