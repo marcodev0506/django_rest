@@ -6,12 +6,12 @@ from bookings.models import Appointment
 from .serializers import DoctorSerializer
 from .models import Doctor
 from .permissions import IsDoctor
-from rest_framework.permissions import IsAuthenticatedOrReadOnly
+from rest_framework.permissions import IsAuthenticated
 
 class DoctorViewSet(viewsets.ModelViewSet):
     serializer_class = DoctorSerializer
     queryset = Doctor.objects.all()
-    permission_classes = [IsAuthenticatedOrReadOnly, IsDoctor]
+    permission_classes = [IsAuthenticated, IsDoctor]
     @action(['POST'], detail=True, url_path='set-on-vacation')
     def set_on_vacation(self, requests, pk):
         doctor = self.get_object()
